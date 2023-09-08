@@ -1,5 +1,5 @@
 # Algorithms-and-data-structures
-Materials for the practicum for 'Algorithms and data structures' course at SpbU 3rd semester
+Materials for the practicum for "Algorithms and data structures" course at SpbU 3rd semester
 
 ## Dataset generation
 
@@ -7,11 +7,11 @@ A. Generate a dataset with the following sets of properties:
 
 1. Full name - Ivanov Ivan Ivanovich
 2. Phone number - “+79001234567”
-3. Work address - University nab., 7
+3. Work address - University emb., 7
 4. Position - Manager
-5. S/P - 50,000 rubles
+5. Salary - 50,000 rubles
 
-B. Additional information on each property (Saint Petersburg):
+B. Additional information on each property (St. Petersburg):
 
 1. Full name - dictionary by full name.
 2. Phone number - the ability to configure the dataset itself. For example,
@@ -26,19 +26,19 @@ Director - 1%, Chief - 5%, Service personnel (Security Guard,
 Cleaner, Commandant, etc.) - 20%, Accountant - 10%, Manager - 20%,
 The main professions of your company (Programmers, Engineers,
 Doctors, etc.) - 40% and the Secretary - 4%)
-5. S / P - average in this specialty in the city and do
-the probability that will make how many people get gender. bids.
+5. Salary - average in this specialty in the city and do
+the probability that will make how many people get part time.
 (Manager - 50,000 rubles, Manager - 25,000 rubles)
 
 C. Limitations of the dataset:
 
 1. The total number of rows in the dataset is at least 50,000.
-2. FULL name - the dictionary should consist only of Slavic full names
+2. Full name - the dictionary should consist only of Slavic full names
 3. Phone number - all operators and variations of regional codes by
 St. Petersburg.
 4. The minimum number of people at the address is 50 people.
 5. A set of professions - at least 10
-6. S /N - varieties according to the formula = (A set of professions + (A set
+6. Salary - varieties according to the formula = (A set of professions + (A set
 of professions/2))
 Example if we have 15 professions, then variations on S/N should be,
 15+(15/2) = 23. since we round up the quotient to an integer.
