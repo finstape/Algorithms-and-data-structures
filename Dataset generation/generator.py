@@ -2,8 +2,6 @@ import config
 import random
 import pandas as pd
 from typing import List
-import tkinter as tk
-from tkinter import ttk
 
 phone_numbers = set()
 
@@ -18,10 +16,10 @@ def generate_random_full_name(slavic_male_surnames: List[str], slavic_male_names
     return full_name
 
 
-def generate_random_phone_number() -> str:
-    operator = random.choices(list(config.OPERATOR_RU_CODES.keys()), weights=list(config.WEIGHTS_FOR_RU_OPERATORS.values()), k=1)[0]
+def generate_random_phone_number(WEIGHTS_FOR_RU_OPERATORS, OPERATOR_WEIGHTS_FOR_SPB) -> str:
+    operator = random.choices(list(config.OPERATOR_RU_CODES.keys()), weights=list(WEIGHTS_FOR_RU_OPERATORS.values()), k=1)[0]
     is_from_spb = \
-        random.choices([True, False], weights=[config.OPERATOR_WEIGHTS_FOR_SPB[operator], 1 - config.OPERATOR_WEIGHTS_FOR_SPB[operator]], k=1)[0]
+        random.choices([True, False], weights=[OPERATOR_WEIGHTS_FOR_SPB[operator], 1 - OPERATOR_WEIGHTS_FOR_SPB[operator]], k=1)[0]
     if is_from_spb:
         operator_code = random.choice(config.OPERATOR_RU_CODES[operator])
     else:
@@ -30,13 +28,13 @@ def generate_random_phone_number() -> str:
     phone_number = '+7' + str(operator_code)
     phone_number += str(random_number) if random_number > 999999 else '0' * (7 - len(str(random_number))) + str(random_number)
     if phone_number in phone_numbers:
-        return generate_random_phone_number()
+        return generate_random_phone_number(WEIGHTS_FOR_RU_OPERATORS, OPERATOR_WEIGHTS_FOR_SPB)
     else:
         phone_numbers.add(phone_number)
         return phone_number
 
 
-def generate_dataset(N: int, status_label) -> None:
+def generate_dataset(N: int, status_label, WEIGHTS_FOR_RU_OPERATORS, OPERATOR_WEIGHTS_FOR_SPB, WEIGHTS_FOR_JOB_TITLES) -> None:
     try:
         # Getting the lists of male and female surnames, names, patronymics
         with open('datasets/slavic_male_surnames.txt', 'r', encoding='utf-8') as f:
@@ -79,8 +77,8 @@ def generate_dataset(N: int, status_label) -> None:
 
             for i in range(number_of_employees):
                 current_job_title = \
-                random.choices(list(config.WEIGHTS_FOR_JOB_TITLES.keys()), weights=list(config.WEIGHTS_FOR_JOB_TITLES.values()), k=1)[
-                    0]
+                    random.choices(list(WEIGHTS_FOR_JOB_TITLES.keys()), weights=list(WEIGHTS_FOR_JOB_TITLES.values()), k=1)[
+                        0]
                 if config.WEIGHTS_FOR_HALF_TIME[current_job_title] != 0:
                     is_job_half_time = random.choices([True, False], weights=[config.WEIGHTS_FOR_HALF_TIME[current_job_title],
                                                                               1 - config.WEIGHTS_FOR_HALF_TIME[current_job_title]], k=1)[0]
@@ -89,7 +87,8 @@ def generate_dataset(N: int, status_label) -> None:
                 salary = config.SALARY[current_job_title] // 2 if is_job_half_time else config.SALARY[current_job_title]
                 dataset[current_amount] = [
                     generate_random_full_name(slavic_male_surnames, slavic_male_names, slavic_male_patronymics, slavic_female_surnames,
-                                              slavic_female_names, slavic_female_patronymics), generate_random_phone_number(), current_address,
+                                              slavic_female_names, slavic_female_patronymics),
+                    generate_random_phone_number(WEIGHTS_FOR_RU_OPERATORS, OPERATOR_WEIGHTS_FOR_SPB), current_address,
                     current_job_title, salary]
                 current_amount += 1
 
@@ -115,7 +114,6 @@ def generate_dataset(N: int, status_label) -> None:
 
             for col_idx, (column, width) in enumerate(column_widths.items()):
                 worksheet.column_dimensions[chr(66 + col_idx)].width = width
-        status_label.config(text="Done")
+        status_label.configure(text="Done", text_color="green")
     except:
-        status_label.config(text="Error")
-
+        status_label.configure(text="Error", text_color="red")
