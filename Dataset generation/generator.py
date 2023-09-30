@@ -114,6 +114,6 @@ def generate_dataset(N: int, status_label, WEIGHTS_FOR_RU_OPERATORS, OPERATOR_WE
 
             for col_idx, (column, width) in enumerate(column_widths.items()):
                 worksheet.column_dimensions[chr(66 + col_idx)].width = width
-        status_label.configure(text="Done", text_color="green")
+        status_label.configure(text="Готово", text_color="green")
     except:
-        status_label.configure(text="Error", text_color="red")
+        status_label.configure(text="Ошибка", text_color="red")
