@@ -1,3 +1,4 @@
+import process
 import threading
 import customtkinter as ctk
 from tkinter import filedialog
@@ -19,6 +20,7 @@ class InterfaceApp:
         self.checkboxes = None
         self.checkbox_labels = None
         self.status_label = None
+        self.enabled_instances = None
 
         self.create_interface()
 
@@ -41,8 +43,8 @@ class InterfaceApp:
         for i, checkbox in enumerate(self.checkboxes):
             checkbox.grid(row=i // 2 + 2, column=i % 2, padx=10, pady=10, sticky="w")
 
-        """ Create a button to start dataset anonymization """
-        self.button_ds_anon = ctk.CTkButton(self.root, text="Обезличивание данных", command=self.start_ds_anon)
+        """ Create a button to start dataset depersonalization """
+        self.button_ds_anon = ctk.CTkButton(self.root, text="Обезличивание данных", command=self.start_depersonalization)
         self.button_ds_anon.grid(row=5, column=0, padx=10, pady=10, sticky="w")
 
         """ Create a button to start calculating k-anonymity """
@@ -59,18 +61,21 @@ class InterfaceApp:
             self.input_file_label.configure(text="Входной файл: Выбран")
 
     def threading_run_ds_anon(self) -> None:
-        t = threading.Thread(target=self.start_ds_anon)
+        t = threading.Thread(target=self.start_depersonalization)
         t.start()
 
     def threading_run_k_anon_calc(self) -> None:
         t = threading.Thread(target=self.start_k_anon_calc)
         t.start()
 
-    def start_ds_anon(self) -> None:
-        pass
+    def start_depersonalization(self) -> None:
+        dataset = process.DatasetDepersonalization(self.input_file, self.status_label)
+        dataset.depersonalization()
 
     def start_k_anon_calc(self) -> None:
-        pass
+        self.enabled_instances = [label for label, checkbox in zip(self.checkbox_labels, self.checkboxes) if checkbox.get() == 1]
+        dataset = process.DatasetDepersonalization(self.input_file, self.status_label, self.enabled_instances)
+        dataset.calc_k_anonymity()
 
 
 if __name__ == "__main__":
