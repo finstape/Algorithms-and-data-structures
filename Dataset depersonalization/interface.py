@@ -44,11 +44,11 @@ class InterfaceApp:
             checkbox.grid(row=i // 2 + 2, column=i % 2, padx=10, pady=10, sticky="w")
 
         """ Create a button to start dataset depersonalization """
-        self.button_ds_anon = ctk.CTkButton(self.root, text="Обезличивание данных", command=self.start_depersonalization)
+        self.button_ds_anon = ctk.CTkButton(self.root, text="Обезличивание данных", command=self.threading_run_ds_anon)
         self.button_ds_anon.grid(row=5, column=0, padx=10, pady=10, sticky="w")
 
         """ Create a button to start calculating k-anonymity """
-        self.button_k_anon_calc = ctk.CTkButton(self.root, text="Вычисление К-анонимити", command=self.start_k_anon_calc)
+        self.button_k_anon_calc = ctk.CTkButton(self.root, text="Вычисление К-анонимити", command=self.threading_run_k_anon_calc)
         self.button_k_anon_calc.grid(row=5, column=1, padx=10, pady=10, sticky="e")
 
         """ Create a status label """
@@ -69,10 +69,12 @@ class InterfaceApp:
         t.start()
 
     def start_depersonalization(self) -> None:
+        self.status_label.configure(text="В процессе...", text_color="green")
         dataset = process.DatasetDepersonalization(self.input_file, self.status_label)
         dataset.depersonalization()
 
     def start_k_anon_calc(self) -> None:
+        self.status_label.configure(text="В процессе...", text_color="green")
         self.enabled_instances = [label for label, checkbox in zip(self.checkbox_labels, self.checkboxes) if checkbox.get() == 1]
         dataset = process.DatasetDepersonalization(self.input_file, self.status_label, self.enabled_instances)
         dataset.calc_k_anonymity()

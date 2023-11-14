@@ -11,13 +11,17 @@ class DatasetDepersonalization:
         self.k_anonymity = 0
 
     def depersonalization(self) -> None:
-        table = pd.read_excel(f"{self.file_path}")
-        ids = table["Номер"].to_numpy()
+        table = pd.read_excel(f"{self.file_path}",
+                              dtype={"ФИО": str, "Номер телефона": str, "Адрес работы": str, "Должность": str, "З/П, в рублях": int})
+        del table["Unnamed: 0"]
         full_names = table["ФИО"].to_numpy()
         phone_numbers = table["Номер телефона"].to_numpy()
         job_addresses = table["Адрес работы"].to_numpy()
         positions = table["Должность"].to_numpy()
         salary = table["З/П, в рублях"].to_numpy()
+
+        for i in range(len(phone_numbers)):
+            phone_numbers[i] = str(phone_numbers[i])[:6] + "******"
 
         self.status_label.configure(text="Выполнено!", text_color="green")
 
