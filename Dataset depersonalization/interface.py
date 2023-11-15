@@ -38,7 +38,7 @@ class InterfaceApp:
         self.status_label.grid(row=1, column=0, columnspan=2, padx=10)
 
         """ Create CTkCheckBox instances with default state set to True """
-        self.checkbox_labels = ["Номер", "ФИО", "Номер телефона", "Адрес работы", "Должность", "З/П, в рублях"]
+        self.checkbox_labels = ["ФИО", "Номер телефона", "Адрес работы", "Должность", "З/П, в рублях"]
         self.checkboxes = [ctk.CTkCheckBox(self.root, text=label) for label in self.checkbox_labels]
         for i, checkbox in enumerate(self.checkboxes):
             checkbox.grid(row=i // 2 + 2, column=i % 2, padx=10, pady=10, sticky="w")
@@ -69,6 +69,9 @@ class InterfaceApp:
         t.start()
 
     def start_depersonalization(self) -> None:
+        if not self.input_file:
+            self.status_label.configure(text="Выберете исходный файл!", text_color="red")
+            return
         self.status_label.configure(text="В процессе...", text_color="green")
         dataset = process.DatasetDepersonalization(self.input_file, self.status_label)
         dataset.depersonalization()
