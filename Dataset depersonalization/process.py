@@ -80,6 +80,8 @@ class DatasetDepersonalization:
         if k_anonimyty == 1:
             output_text += "\nК-анонимити = 1\nУникальные строки:\n"
             output_text += ''.join([f"{row}\n" for row in unique_rows_count if unique_rows_count[row] == 1])
+        else:
+            output_text += f"\nК-анонимити = {k_anonimyty}"
 
         """ Сохранение нужного текста для вывода """
         with open("output.txt", "w", encoding="utf-8") as file:
