@@ -18,9 +18,17 @@ class DatasetDepersonalization:
         positions = table["Должность"].to_numpy()
         salary = table["З/П, в рублях"].to_numpy()
 
+        streets_to_districts = dict()
+        with open("saint_petersburg_districts.txt", "r", encoding="utf-8") as file:
+            for num in range(0, 3008, 2):
+                street = file.readline()[:-1]
+                district = file.readline()[:-1]
+                streets_to_districts[street] = district
+
         for i in range(len(phone_numbers)):
             full_names[i] = ""  # Удаление атрибутов
             phone_numbers[i] = str(phone_numbers[i])[:5] + "******"  # Маскеризация
+            job_addresses[i] = streets_to_districts[list(job_addresses[i].split(', д. '))[0]]
             salary[i] = "10000-50000" if 10000 <= int(salary[i]) <= 50000 else "50000-125000"  # Локальное обобщение
 
         """ Создание таблице в pandas """
@@ -79,7 +87,7 @@ class DatasetDepersonalization:
         output_text += f"\nКоличество уникальных строк в датасете = {len(unique_rows_count)}\n"
         if k_anonimyty == 1:
             output_text += "\nК-анонимити = 1\nУникальные строки:\n"
-            output_text += ''.join([f"{row}\n" for row in unique_rows_count if unique_rows_count[row] == 1])
+            output_text += "".join([f"{row}\n" for row in unique_rows_count if unique_rows_count[row] == 1])
         else:
             output_text += f"\nК-анонимити = {k_anonimyty}"
 
