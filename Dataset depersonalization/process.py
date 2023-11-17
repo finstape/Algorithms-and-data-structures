@@ -76,23 +76,23 @@ class DatasetDepersonalization:
             except KeyError:
                 unique_rows_count[concatenated_row] = 1
 
-        k_anonimyty = len(data)
+        k_anonymity = len(data)
         min_occurrences_list = sorted([count for count in unique_rows_count.values()])
         for row, count in unique_rows_count.items():
             if count in min_occurrences_list[:5]:
                 percentage = round(count / len(data) * 100, 3)
                 output_text += f"{row}, к={count}, {percentage}%\n"
-            k_anonimyty = min(k_anonimyty, unique_rows_count[row])
+            k_anonymity = min(k_anonymity, unique_rows_count[row])
 
         output_text += f"\nКоличество уникальных строк в датасете = {len(unique_rows_count)}\n"
-        if k_anonimyty == 1:
+        if k_anonymity == 1:
             output_text += "\nК-анонимити = 1\nУникальные строки:\n"
             output_text += "".join([f"{row}\n" for row in unique_rows_count if unique_rows_count[row] == 1])
         else:
-            output_text += f"\nК-анонимити = {k_anonimyty}"
+            output_text += f"\nК-анонимити = {k_anonymity}"
 
         """ Сохранение нужного текста для вывода """
         with open("output.txt", "w", encoding="utf-8") as file:
             file.write(output_text)
 
-        self.status_label.configure(text=f"k-anonymity={k_anonimyty}", text_color="green")
+        self.status_label.configure(text=f"k-anonymity={k_anonymity}", text_color="green")
