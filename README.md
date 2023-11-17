@@ -42,3 +42,35 @@ St. Petersburg.
 of professions/2))
 Example if we have 15 professions, then variations on S/N should be,
 15+(15/2) = 23. since we round up the quotient to an integer.
+
+## Dataset depersonalization
+
+Part of the user:
+
+1) The program must read the input file (the final file of the 1st laboratory work)
+2) The program is divided by functionality.  
+  a) Depersonalization of the input dataset.  
+  b) Calculating the K-anonymity of the input dataset.
+4) The user has the opportunity to specify Quasi-identifiers in K-anonymity.
+
+Part of the programmer:
+
+4) At your choice, we depersonalize the date set according to these methods (combining is welcome, but the main thing is to prove the effectiveness of this combination of methods):  
+  a) Local generalization  
+  b) Aggregation  
+  c) Perturbation  
+  d) Micro-aggregation  
+  e) Mixing  
+  f) Creating aliases  
+  g) Masking  
+  h) Local suppression  
+  i) Removing attributes  
+  j) Decomposition method  
+5) Using the K-anonymity method, calculate K for an impersonal set.
+6) Output 5 "bad" values of K-anonymity (if there are fewer of them, then all possible). The data of the variable K is output as a percentage of the entire set. 
+7) The number of unique rows in the data set, according to quasi-indicators. Output unique strings if the variable K=1. 
+8) Output an acceptable K-anonymity value for the data set:  
+  a) up to 51000 records - K>=10  
+  b) up to 105,000 records - K>=7  
+  c) up to 260000 records - K>=5  
+9) Evaluate the usefulness of the data by comparing the depersonalized set with the original set
