@@ -27,11 +27,11 @@ class DatasetDepersonalization:
 
         for i in range(len(phone_numbers)):
             full_names[i] = ""  # Удаление атрибутов
-            phone_numbers[i] = str(phone_numbers[i])[:5] + "******"  # Маскеризация
-            job_addresses[i] = streets_to_districts[list(job_addresses[i].split(', д. '))[0]]
-            salary[i] = "10000-50000" if 10000 <= int(salary[i]) <= 50000 else "50000-125000"  # Локальное обобщение
+            phone_numbers[i] = phone_numbers[i][:5] + "******"  # Маскеризация
+            job_addresses[i] = streets_to_districts[list(job_addresses[i].split(", д. "))[0]]  # Локальное обобщение
+            salary[i] = "10000-70000" if 10000 <= int(salary[i]) <= 70000 else "70000-125000"  # Локальное обобщение
 
-        """ Создание таблице в pandas """
+        """ Создание таблицы в pandas """
         df = pd.DataFrame(
             {"ФИО": full_names, "Номер телефона": phone_numbers, "Адрес работы": job_addresses, "Должность": positions, "З/П, в рублях": salary})
         df.index = range(1, len(df) + 1)
@@ -56,7 +56,7 @@ class DatasetDepersonalization:
         self.status_label.configure(text="Выполнено!", text_color="green")
 
     def calc_k_anonymity(self) -> None:
-        table = pd.read_excel("dataset anonymized.xlsx",
+        table = pd.read_excel(f"{self.file_path}",
                               dtype={"ФИО": str, "Номер телефона": str, "Адрес работы": str, "Должность": str, "З/П, в рублях": str})
         del table["Unnamed: 0"]
 

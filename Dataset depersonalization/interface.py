@@ -77,6 +77,9 @@ class InterfaceApp:
         dataset.depersonalization()
 
     def start_k_anon_calc(self) -> None:
+        if not self.input_file:
+            self.status_label.configure(text="Выберете исходный файл!", text_color="red")
+            return
         self.status_label.configure(text="В процессе...", text_color="green")
         self.enabled_instances = [label for label, checkbox in zip(self.checkbox_labels, self.checkboxes) if checkbox.get() == 1]
         dataset = process.DatasetDepersonalization(self.input_file, self.status_label, self.enabled_instances)
