@@ -48,7 +48,7 @@ class InterfaceApp:
         self.button_ds_anon.grid(row=5, column=0, padx=10, pady=10, sticky="w")
 
         """ Create a button to start calculating k-anonymity """
-        self.button_k_anon_calc = ctk.CTkButton(self.root, text="Вычисление К-анонимити", command=self.threading_run_k_anon_calc)
+        self.button_k_anon_calc = ctk.CTkButton(self.root, text="Вычисление k-anonymity", command=self.threading_run_k_anon_calc)
         self.button_k_anon_calc.grid(row=5, column=1, padx=10, pady=10, sticky="e")
 
         """ Create a status label """
