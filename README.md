@@ -74,3 +74,16 @@ Part of the programmer:
   b) up to 105,000 records - K>=7  
   c) up to 260000 records - K>=5  
 9) Evaluate the usefulness of the data by comparing the depersonalized set with the original set
+
+## Hash functions research
+
+The purpose of the work is to decrypt a data set encrypted using a hash function using an input modifier – salt, and also to analyze the solution of a similar problem under different conditions.
+
+The procedure for performing laboratory work:
+
+1. To study the features of encryption of phone numbers.
+2. Write a program to de-identify the dataset.
+3. Test the program on the issued version.
+4. Test with at least 3 more different hash functions that encrypt the original depersonalized set.
+5. Write what causes the decryption speed to change. The effect of the type of salt, the length of the salt and the hash function on the speed of decryption of the dataset.
+6. Write a report.
