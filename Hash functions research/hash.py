@@ -1,38 +1,39 @@
 ﻿import hashlib
 
 
-def hash_md5(data):
-    h = hashlib.md5(str(data).encode('utf-8'))
+def hash_data(data, algorithm):
+    h = hashlib.new(algorithm)
+    h.update(str(data).encode('utf-8'))
     return h.hexdigest()
 
 
-def hash_sha1(data):
-    h = hashlib.sha1(str(data).encode('utf-8'))
-    return h.hexdigest()
-
-
-def hash_sha256(data):
-    h = hashlib.sha256(str(data).encode('utf-8'))
-    return h.hexdigest()
-
-
-def write_to_file(file_path, data):
+def write_list_to_file(file_path, data_list):
     with open(file_path, "w") as f:
-        for item in data:
-            f.write(str(item) + '\n')
+        f.write('\n'.join(map(str, data_list)) + '\n')
 
 
-with open("numbers.txt", "r") as f:
-    NUMBERS = [int(line) for line in f.readlines()]
+def read_numbers_from_file(file_path):
+    with open(file_path, "r") as f:
+        return [int(line) for line in f.readlines()]
 
-TEST_SALTS = [1, 1000, 100000, 291673, 9999999, 30000000, 123456789, 500000000, 999999999, 100000000]
-for salt in TEST_SALTS:
-    salted_numbers = [num + salt for num in NUMBERS]
 
-    MD5_HASHES = [hash_md5(num) for num in salted_numbers]
-    SHA1_HASHES = [hash_sha1(num) for num in salted_numbers]
-    SHA256_HASHES = [hash_sha256(num) for num in salted_numbers]
+def generate_hashes(salted_numbers):
+    md5_hashes = [hash_data(num, 'md5') for num in salted_numbers]
+    sha1_hashes = [hash_data(num, 'sha1') for num in salted_numbers]
+    sha256_hashes = [hash_data(num, 'sha256') for num in salted_numbers]
+    return md5_hashes, sha1_hashes, sha256_hashes
 
-    write_to_file(f"hashed/md5_{str(salt)}.txt", MD5_HASHES)
-    write_to_file(f"hashed/sha1_{str(salt)}.txt", SHA1_HASHES)
-    write_to_file(f"hashed/sha256_{str(salt)}.txt", SHA256_HASHES)
+
+if __name__ == "__main__":
+    with open("numbers.txt", "r") as f:
+        numbers = read_numbers_from_file(f)
+
+    test_salts = [1, 1000, 100000, 291673, 9999999, 30000000, 123456789, 500000000, 999999999, 100000000]
+
+    for salt in test_salts:
+        salted_numbers = [num + salt for num in numbers]
+        md5_hashes, sha1_hashes, sha256_hashes = generate_hashes(salted_numbers)
+
+        write_list_to_file(f"hashed/md5_{str(salt)}.txt", md5_hashes)
+        write_list_to_file(f"hashed/sha1_{str(salt)}.txt", sha1_hashes)
+        write_list_to_file(f"hashed/sha256_{str(salt)}.txt", sha256_hashes)
