@@ -14,7 +14,7 @@ def calculate_function_result(function_choice, x1, x2):
 class GeneticAlgorithm:
     """ Класс, отвечающий за генетический алгоритм """
 
-    def __init__(self, function_choice, mutation_prob, num_chromosomes, min_gene, max_gene, num_generations):
+    def __init__(self, function_choice, mutation_prob, num_chromosomes, min_gene, max_gene, num_generations, encoding_type):
         """ Инициализация параметров генетического алгоритма """
         self.function_choice = function_choice  # Выбранная функция
         self.mutation_prob = mutation_prob / 100.0  # Вероятность мутации (перевод в доли)
@@ -24,6 +24,7 @@ class GeneticAlgorithm:
         self.num_generations = num_generations  # Количество поколений
         self.mutation_std_dev = 0.2  # Новый параметр для стратегии эволюционных стратегий
         self.population = []  # Хранение текущей популяции хромосом
+        self.encoding_type = encoding_type  # Добавление параметра для хранения типа кодирования
 
     def run(self):
         """ Запуск генетического алгоритма """
@@ -35,14 +36,31 @@ class GeneticAlgorithm:
             self.crossover()
             self.mutation()
 
-    def initialize_population(self):
-        """ Инициализация начальной популяции случайными хромосомами """
+    def binary_encoding(self):
+        """ Binary encoding of chromosomes """
+        self.population = []
+        for i in range(self.num_chromosomes):
+            gene1_binary = format(random.randint(int(self.min_gene), int(self.max_gene)), 'b')
+            gene2_binary = format(random.randint(int(self.min_gene), int(self.max_gene)), 'b')
+            gene1 = int(gene1_binary, 2)
+            gene2 = int(gene2_binary, 2)
+            self.population.append((gene1, gene2, 0))  # 0 - временное значение результата
+
+    def real_encoding(self):
+        """ Вещественное кодирование хромосом """
         self.population = []
         for i in range(self.num_chromosomes):
             gene1 = random.uniform(self.min_gene, self.max_gene)
             gene2 = random.uniform(self.min_gene, self.max_gene)
             result = calculate_function_result(self.function_choice, gene1, gene2)
             self.population.append((gene1, gene2, result))
+
+    def initialize_population(self):
+        """ Инициализация начальной популяции с учетом выбора кодирования """
+        if self.encoding_type == "binary":
+            self.binary_encoding()
+        elif self.encoding_type == "real":
+            self.real_encoding()
 
     def calculate_fitness(self):
         """ Расчет значения функции для каждой хромосомы в текущей популяции """
@@ -125,6 +143,9 @@ class GeneticAlgorithmInterface:
         self.result_label = ttk.Label(self.root, text="Результат:")
         self.result_text = scrolledtext.ScrolledText(self.root, width=30, height=5)
         self.result_text.config(state=tk.DISABLED)
+        self.encoding_label = ttk.Label(self.root, text="Тип кодирования:")
+        self.encoding_combobox = ttk.Combobox(self.root, values=["Бинарное", "Вещественное"], state="readonly")
+        self.encoding_combobox.current(0)
 
         self.table_label = ttk.Label(self.root, text="Таблица хромосом:")
         self.tree = ttk.Treeview(self.root, columns=('Number', 'Result', 'Gene1', 'Gene2'), show='headings', height=15)
@@ -155,6 +176,8 @@ class GeneticAlgorithmInterface:
         self.result_text.grid(row=7, column=1, padx=10, pady=10, columnspan=1)
         self.table_label.grid(row=0, column=2, padx=10, pady=10, sticky="w")
         self.tree.grid(row=0, column=2, padx=10, pady=10, columnspan=2, rowspan=9)
+        self.encoding_label.grid(row=8, column=0, padx=10, pady=10, sticky="w")
+        self.encoding_combobox.grid(row=8, column=1, padx=10, pady=10)
 
     def run_genetic_algorithm(self):
         """ Получение параметров из интерфейса """
@@ -164,9 +187,10 @@ class GeneticAlgorithmInterface:
         min_gene = float(self.min_gene_entry.get())
         max_gene = float(self.max_gene_entry.get())
         num_generations = int(self.num_generations_entry.get())
+        encoding_type = "binary" if self.encoding_combobox.get() == "Бинарное" else "real"
 
         """ Создание экземпляра генетического алгоритма и запуск """
-        genetic_algorithm = GeneticAlgorithm(function_choice, mutation_prob, num_chromosomes, min_gene, max_gene, num_generations)
+        genetic_algorithm = GeneticAlgorithm(function_choice, mutation_prob, num_chromosomes, min_gene, max_gene, num_generations, encoding_type)
         genetic_algorithm.run()
 
         """ Получение и вывод результатов """
