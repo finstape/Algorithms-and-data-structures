@@ -37,7 +37,7 @@ class GeneticAlgorithm:
             self.mutation()
 
     def binary_encoding(self):
-        """ Binary encoding of chromosomes """
+        """ Бинарное кодирование хромосом """
         self.population = []
         for i in range(self.num_chromosomes):
             gene1_binary = format(random.randint(int(self.min_gene), int(self.max_gene)), 'b')
