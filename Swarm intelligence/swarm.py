@@ -35,9 +35,11 @@ class Swarm:
         self.global_coeff = global_coeff
         self.calculate_function_result = calculate_function_result
 
-    def update_particle(self, particle, global_best_position):
+    def update_particle(self, particle, global_best_position, iteration, max_iterations):
         """ Обновление положения и скорости частицы """
-        inertia_term = self.inertia * particle.velocity
+        current_inertia = self.inertia * (1 - iteration / max_iterations)
+
+        inertia_term = current_inertia * particle.velocity
         personal_term = self.personal_coeff * random.random() * (particle.best_position - particle.position)
         global_term = self.global_coeff * random.random() * (global_best_position - particle.position)
         particle.velocity = inertia_term + personal_term + global_term
@@ -120,7 +122,7 @@ class ParticleSwarmOptimizationApp:
 
         for iteration in range(num_iterations):
             for particle in swarm.particles:
-                swarm.update_particle(particle, global_best_position)
+                swarm.update_particle(particle, global_best_position, iteration, num_iterations)
                 current_value = calculate_function_result(function_choice, particle.position[0], particle.position[1])
 
                 if current_value < global_best_value:
